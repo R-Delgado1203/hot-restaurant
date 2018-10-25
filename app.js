@@ -7,54 +7,47 @@ var PORT = process.env.PORT || 3000;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-var reservations = [
-  {
-      name: "",
-      id: "",
-      email: "",
-      phone: 0
-  }
-];
+var tables = [];
+var waitlist = [];
 
-app.get("/", function(req, res) {
-  res.sendFile(path.join(__dirname, "index.html"));
+app.get("/", function (req, res) {
+    res.sendFile(path.join(__dirname, "home.html"));
 });
 
-app.get("/reservations", function(req, res) {
-  res.sendFile(path.join(__dirname, "reservations.html"));
+app.get("/reserve", function (req, res) {
+    res.sendFile(path.join(__dirname, "reserve.html"));
 });
 
-app.get("/tables", function(req, res) {
-  res.sendFile(path.join(__dirname, "tables.html"));
+app.get("/tables", function (req, res) {
+    res.sendFile(path.join(__dirname, "tables.html"));
 });
 
-app.get("/api/reservations", function(req, res) {
-  return res.json(reservations);
+app.get("/api/tables", function (req, res) {
+    return res.json(tables);
 });
 
-app.get("/api/reservations/:reservation", function(req, res) {
-  var selected = req.params.reservation;
-
-  console.log(selected);
-
-  for (var i = 0; i < reservations.length; i++) {
-    if (selected === reservations[i].id) {
-      return res.json(reservations[i]);
-    }
-  }
-  return res.json(false);
+app.get("/api/waitlist", function (req, res) {
+    return res.json(waitlist);
 });
 
 
-app.post("/api/reservations", function(req, res) {
-  var newreservation = req.body;
+app.post("/api/tables", function (req, res) {
+    var newReservation = req.body;
 
-  newreservation.id = newreservation.name.replace(/\s+/g, "").toLowerCase();
-  console.log(newreservation);
-  characters.push(newreservation);
-  res.json(newreservation);
+    newReservation.id = newReservation.name
+    console.log(newReservation);
+    tables.push(newReservation);
+    res.json(newReservation);
+});
+app.post("/api/waitlist", function (req, res) {
+    var wait = req.body;
+
+    wait.id = wait.name
+    console.log(wait);
+    waitlist.push(wait);
+    res.json(wait);
 });
 
-app.listen(PORT, function() {
-  console.log("App listening on PORT " + PORT);
+app.listen(PORT, function () {
+    console.log("App listening on PORT " + PORT);
 });
